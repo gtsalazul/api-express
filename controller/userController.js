@@ -33,8 +33,35 @@ const createUser = (req, res) => {
     res.status(201).json(newUser);
 }
 
+const updateUser = (req, res) => {
+    const userId = parseInt(req.params.id);
+    const { nome, email } = req.body;
+
+    const userIndex = users.findIndex((u) => u.id == userId);
+    if (userIndex === -1) {
+        return res.status(404).json({error: "usuário não encontrado!"})
+    }
+
+    if (nome) users[userIndex].nome = nome;
+    if (email) users[userIndex].email = email;
+    // users[userIndex] = {
+    //     ...users[userIndex],
+    //     nome,
+    //     email
+    // };
+    res.json(users[userIndex]);
+}
+
+const deleteUser = (req, res) => {
+    const userId = parseInt(req.params.id);
+    users = users.find((u) => u.id !== userId);
+    res.json({message: "Usuário deletado com sucesso!"})
+}
+
 module.exports = {
     getAllUsers,
     getUserById,
-    createUser
+    createUser,
+    updateUser,
+    deleteUser
 }
